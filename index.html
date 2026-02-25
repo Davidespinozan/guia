@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Respira. Vas a estar bien. — Tu Guía</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:#F7F3EC;color:#3A4A4E;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.bg-fixed{position:fixed;inset:0;z-index:-1;background:linear-gradient(175deg,#E4F0EE 0%,#D6E8E4 25%,#D0DFD8 45%,#DDE0CC 65%,#EAE4D2 85%,#F3EDDF 100%)}
+.bg-fixed::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 15% 20%,rgba(140,197,191,.35) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 80% 70%,rgba(212,168,83,.12) 0%,transparent 60%)}
+.guide-shell{max-width:640px;margin:0 auto;padding:0 1.2rem 4rem}
+.guide-header{text-align:center;padding:3rem 1rem 2.5rem}
+.guide-logo{height:100px;margin-bottom:1.5rem;opacity:.9}
+.guide-header h1{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:300;color:#3D8C84;line-height:1.12;letter-spacing:-.02em}
+.guide-header h1 strong{font-weight:600}
+.guide-header h1 em{font-style:italic;display:block;background:linear-gradient(135deg,#5BA8A0,#3D8C84);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.guide-header .tag{display:inline-block;margin-top:1rem;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:#7D9498;font-weight:600}
+.guide-header .author-line{margin-top:1.8rem;display:flex;align-items:center;justify-content:center;gap:.8rem}
+.guide-header .author-photo{width:42px;height:42px;border-radius:50%;overflow:hidden;border:2px solid rgba(91,168,160,.25)}
+.guide-header .author-photo img{width:100%;height:100%;object-fit:cover}
+.guide-header .author-name{font-family:'Cormorant Garamond',serif;font-size:.95rem;color:#478F87;font-weight:600;text-align:left}
+.guide-header .author-role{font-size:.62rem;color:#7D9498;letter-spacing:.04em}
+.progress-wrap{position:sticky;top:0;z-index:50;background:rgba(247,243,236,.92);backdrop-filter:blur(12px);padding:.5rem 0;margin-bottom:1.5rem;border-bottom:1px solid rgba(91,168,160,.08)}
+.progress-bar{height:3px;border-radius:2px;background:rgba(91,168,160,.12);overflow:hidden}
+.progress-fill{height:100%;width:0%;border-radius:2px;background:linear-gradient(90deg,#9DD0CA,#5BA8A0,#D4A853);transition:width .4s}
+.progress-text{font-size:.6rem;color:#7D9498;text-align:center;margin-top:.3rem;letter-spacing:.05em;font-weight:600}
+.section-card{margin-bottom:1rem;border-radius:20px;overflow:hidden;background:rgba(255,255,255,.55);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.6);transition:box-shadow .4s}
+.section-card:hover{box-shadow:0 8px 35px rgba(91,168,160,.08)}
+.section-card.open{box-shadow:0 12px 45px rgba(91,168,160,.1)}
+.section-toggle{width:100%;display:flex;align-items:center;gap:1rem;padding:1.3rem 1.5rem;cursor:pointer;background:none;border:none;text-align:left;font-family:'Nunito',sans-serif;transition:background .3s}
+.section-toggle:hover{background:rgba(91,168,160,.04)}
+.section-toggle .num{width:36px;height:36px;border-radius:12px;flex-shrink:0;background:linear-gradient(135deg,rgba(91,168,160,.12),rgba(212,168,83,.08));display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1rem;color:#478F87;font-weight:700}
+.section-toggle .num.icon{font-size:1.2rem}
+.section-toggle .toggle-text{flex:1}
+.section-toggle .toggle-text h2{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:#3A4A4E;font-weight:600;line-height:1.3}
+.section-toggle .toggle-text .preview{font-size:.75rem;color:#7D9498;margin-top:.15rem;line-height:1.4}
+.section-toggle .chevron{width:20px;height:20px;flex-shrink:0;transition:transform .4s cubic-bezier(.22,1,.36,1);color:#9DD0CA}
+.section-card.open .chevron{transform:rotate(180deg)}
+.section-body{max-height:0;overflow:hidden;transition:max-height .6s cubic-bezier(.22,1,.36,1),padding .4s;padding:0 1.5rem}
+.section-card.open .section-body{max-height:3000px;padding:0 1.5rem 2rem}
+.section-body p{font-size:.95rem;color:#3F5357;line-height:1.85;margin-bottom:1rem}
+.section-body p:last-child{margin-bottom:0}
+.emphasis{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-style:italic;color:#3D8C84;line-height:1.6;padding:1.2rem 1.5rem;margin:1rem 0;background:linear-gradient(135deg,rgba(91,168,160,.06),rgba(212,168,83,.04));border-left:3px solid #D4A853;border-radius:0 14px 14px 0}
+.mantra{text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:#3D8C84;padding:1.5rem;margin:1.2rem 0;background:rgba(255,255,255,.5);border-radius:16px;border:1px solid rgba(91,168,160,.12)}
+.step-box{background:rgba(255,255,255,.5);border-radius:16px;padding:1.3rem 1.5rem;margin:1rem 0;border:1px solid rgba(91,168,160,.1)}
+.step-box h4{font-family:'Cormorant Garamond',serif;font-size:1rem;color:#478F87;font-weight:600;margin-bottom:.4rem}
+.step-box p{font-size:.88rem;margin-bottom:.5rem}
+.step-box .note{font-size:.8rem;color:#7D9498;font-style:italic}
+.sense-item{display:flex;align-items:flex-start;gap:.8rem;padding:1rem 0;border-bottom:1px solid rgba(91,168,160,.06)}
+.sense-item:last-child{border-bottom:none}
+.sense-item .sense-num{width:32px;height:32px;border-radius:10px;flex-shrink:0;background:linear-gradient(135deg,rgba(91,168,160,.1),rgba(212,168,83,.06));display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:700;color:#478F87}
+.sense-item .sense-content h5{font-size:.88rem;color:#3A4A4E;font-weight:700;margin-bottom:.2rem}
+.sense-item .sense-content p{font-size:.85rem;margin-bottom:0}
+.breathe-widget{text-align:center;padding:2rem 1rem;margin:1rem 0;background:rgba(255,255,255,.4);border-radius:20px;border:1px solid rgba(91,168,160,.1)}
+.breathe-circle{width:120px;height:120px;border-radius:50%;margin:0 auto 1rem;background:radial-gradient(circle,rgba(157,208,202,.3),rgba(91,168,160,.1));border:2px solid rgba(91,168,160,.2);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:#478F87;font-weight:600;transition:all .3s}
+.breathe-circle.active{animation:breatheAnim 14s ease-in-out infinite}
+@keyframes breatheAnim{0%{transform:scale(1);border-color:rgba(91,168,160,.15)}14%{transform:scale(1.35);border-color:rgba(91,168,160,.4)}28%{transform:scale(1.35);border-color:rgba(91,168,160,.4)}57%{transform:scale(1);border-color:rgba(91,168,160,.15)}100%{transform:scale(1);border-color:rgba(91,168,160,.15)}}
+.breathe-btn{display:inline-block;background:linear-gradient(135deg,#6AADA5,#478F87);color:#fff;border:none;padding:.6rem 1.8rem;border-radius:50px;font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .3s;box-shadow:0 4px 15px rgba(91,168,160,.25);margin-top:1rem}
+.breathe-btn:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(91,168,160,.35)}
+.expand-btn{display:inline-block;background:none;border:1.5px solid rgba(91,168,160,.2);border-radius:50px;padding:.55rem 1.5rem;font-family:'Nunito',sans-serif;font-size:.78rem;color:#478F87;font-weight:600;cursor:pointer;transition:all .3s;letter-spacing:.03em}
+.expand-btn:hover{background:rgba(91,168,160,.06)}
+.guide-footer{text-align:center;padding:3rem 1rem 2rem;margin-top:2rem;border-top:1px solid rgba(91,168,160,.08)}
+.guide-footer .fl{height:70px;opacity:.7;margin-bottom:.5rem}
+.guide-footer .sig{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:#6AADA5;opacity:.7}
+.guide-footer .sr{font-size:.6rem;color:#A3B8BC;margin-top:.15rem;letter-spacing:.06em}
+.guide-footer .disc{font-size:.62rem;color:#A3B8BC;max-width:440px;margin:1rem auto 0;line-height:1.5;opacity:.7}
+@media(max-width:500px){
+  .guide-header h1{font-size:2rem}
+  .guide-header{padding:2.5rem .5rem 2rem}
+  .guide-logo{height:80px}
+  .section-toggle{padding:1.1rem 1.2rem;gap:.8rem}
+  .section-toggle .num{width:32px;height:32px;font-size:.9rem;border-radius:10px}
+  .section-toggle .toggle-text h2{font-size:1.02rem}
+  .section-body{padding:0 1.2rem}
+  .section-card.open .section-body{padding:0 1.2rem 1.5rem}
+  .breathe-circle{width:100px;height:100px;font-size:.95rem}
+  .guide-footer .fl{height:56px}
+}
+</style>
+</head>
+<body>
+<div class="bg-fixed"></div>
+<div class="guide-shell">
+  <header class="guide-header">
+    <img src="https://res.cloudinary.com/dp9l5i19b/image/upload/v1771980108/logoluzemy_wrak4l.png" alt="Logo" class="guide-logo">
+    <h1><strong>Respira.</strong><br><em>Vas a estar bien.</em></h1>
+    <div class="tag">Guía para sobrevivir un ataque de ansiedad</div>
+    <div class="author-line">
+      <div class="author-photo"><img src="https://res.cloudinary.com/dp9l5i19b/image/upload/v1771979785/WhatsApp_Image_2026-02-23_at_19.05.35_l08vla.jpg" alt="Luz"></div>
+      <div><div class="author-name">Luz Espinoza</div><div class="author-role">Psicoterapeuta & Life Coach Espiritual</div></div>
+    </div>
+  </header>
+
+  <div class="progress-wrap" id="pw">
+    <div class="progress-bar"><div class="progress-fill" id="pf"></div></div>
+    <div class="progress-text" id="pt">0 de 6 secciones</div>
+  </div>
+
+  <!-- S1 -->
+  <div class="section-card" data-s="1">
+    <button class="section-toggle" onclick="tog(this)">
+      <div class="num icon">💫</div>
+      <div class="toggle-text"><h2>¿Alguna vez has sentido que todo te da vueltas?</h2><div class="preview">Como si el mundo se encogiera a tu alrededor...</div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="section-body">
+      <p>Ese instante en el que te duele la cabeza. Un nudo en la garganta te ahoga. La presión en el pecho no te deja respirar. Un hoyo en el estómago te quema como fuego.</p>
+      <p>Tus manos se entumen. Tus piernas se sienten débiles. Sientes un punzante dolor en la nuca como si llevaras el peso del mundo sobre ti.</p>
+      <p>Lo intentas, pero no puedes hablar. O no puedes parar de llorar. Tu vista se nubla...</p>
+      <p>Un miedo intenso se apodera de ti y lo único que deseas es desaparecer.</p>
+      <div class="emphasis">Te entiendo. No estás sola. No estás loca. Lo que viviste es un ataque de ansiedad. O un ataque de pánico.</div>
+      <p>Y sí, lo sé: se siente como si te fueras a morir ahí mismo. Pero escucha esto con todo tu corazón: <strong>Vas a estar bien.</strong></p>
+      <p>Y para ayudarte a atravesar ese momento, quiero compartirte esta guía de primeros auxilios emocionales. Un paso a paso que diseñé para que puedas sobrevivir el caos... y poco a poco, volver a ti.</p>
+    </div>
+  </div>
+
+  <!-- S2 -->
+  <div class="section-card" data-s="2">
+    <button class="section-toggle" onclick="tog(this)">
+      <div class="num icon">🌊</div>
+      <div class="toggle-text"><h2>Mi momento de crisis</h2><div class="preview">Lo que aprendí cuando todo se derrumbó...</div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="section-body">
+      <p>Recuerdo ese momento en el que sentí que no podía respirar, pensé que me estaba volviendo loca. El corazón me latía tan rápido que sentía que me iba a explotar.</p>
+      <p>El pecho me dolía, la garganta se me cerraba, y cada pensamiento era una avalancha que me aplastaba desde adentro.</p>
+      <p>Todo a mi alrededor se volvía más pequeño, más borroso, más lejano. Mis manos temblaban. Mi cuerpo se deshacía. Y dentro de mí había una voz que gritaba a todo volumen: "No puedo más. No puedo más."</p>
+      <div class="emphasis">En medio de ese caos, algo dentro de mí —muy suave, muy tenue— me susurró: "Estoy contigo. Respira profundo. No estás sola. Imagina una burbuja dorada. Una esfera de luz suave envolviéndote. Aquí estás segura."</div>
+      <p>Así lo hice. Cerré los ojos y me imaginé dentro de esa burbuja. Era tibia. Amorosa. Y aunque mi cuerpo seguía temblando, empecé a respirar más lento.</p>
+      <p>Inhalaba imaginando que esa luz dorada entraba a mis pulmones. Exhalaba soltando el miedo, el ahogo, el dolor. Y en cada respiración repetía como un mantra:</p>
+      <div class="mantra">"Estoy aquí. Estoy viva. Estoy a salvo."</div>
+      <p>No desapareció de inmediato. Pero poco a poco, mi cuerpo dejó de luchar. El dolor se volvió más suave. Y esa burbuja se quedó conmigo como un refugio invisible que puedo invocar cada vez que el mundo se rompe.</p>
+      <p>Mirando hacia atrás, comprendo que nunca estuve realmente sola, y que fue la energía Divina la que me guió a través de ese momento de crisis.</p>
+    </div>
+  </div>
+
+  <!-- S3 -->
+  <div class="section-card" data-s="3">
+    <button class="section-toggle" onclick="tog(this)">
+      <div class="num icon">📋</div>
+      <div class="toggle-text"><h2>Antes de empezar</h2><div class="preview">Lo que necesitas saber sobre esta guía</div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="section-body">
+      <p>Esta guía está diseñada para acompañarte paso a paso a transitar con gentileza y suavidad esos temibles episodios en los que sientes que la tensión aumenta.</p>
+      <p>En ella, he combinado diferentes técnicas para ayudarte a regular tu sistema nervioso en momentos de ansiedad o pánico.</p>
+      <div class="step-box"><h4>📱 Guárdala en tu celular</h4><p>Asegúrate de guardar esta página en favoritos o en tu pantalla de inicio, y tenla a la mano para cuando la requieras.</p></div>
+      <p>Esta guía es meramente una herramienta que puedes utilizar según tu necesidad, más no sustituye la atención de un especialista. Si los síntomas persisten, o son demasiado intensos y recurrentes, te recomiendo acudir con un profesional.</p>
+      <p>Espero que te sirva como un puente entre sentir que pierdes el control, y una sensación de poder personal y unión divina. Y como un recordatorio de que a menudo, todo lo que necesitas ya está dentro de ti.</p>
+    </div>
+  </div>
+
+  <!-- S4 PASO 1 -->
+  <div class="section-card" data-s="4">
+    <button class="section-toggle" onclick="tog(this)">
+      <div class="num">1</div>
+      <div class="toggle-text"><h2>Respira para calmar tu sistema nervioso</h2><div class="preview">Técnica de respiración 4-4-6</div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="section-body">
+      <p>Busca un lugar cómodo y seguro para sentarte.</p>
+      <div class="breathe-widget">
+        <div class="breathe-circle" id="bc">Iniciar</div>
+        <div style="margin-top:.5rem;font-size:.78rem;color:#7D9498" id="bl">Presiona para comenzar</div>
+        <button class="breathe-btn" onclick="startB()" id="bb">Comenzar respiración guiada</button>
+      </div>
+      <div class="step-box"><h4>🌬️ Inhala por la nariz en 4 tiempos</h4><p>1, 2, 3, 4.</p><p class="note">Siente como se llenan tu pecho y tu vientre</p></div>
+      <div class="step-box"><h4>✋ Sostén el aire en 4 tiempos</h4><p>1, 2, 3, 4.</p><p class="note">Imagina que estás guardando calma en tu interior</p></div>
+      <div class="step-box"><h4>💨 Exhala en 6 tiempos</h4><p>1, 2, 3, 4, 5, 6.</p><p class="note">Como si soplaras despacio una vela</p></div>
+      <p>Repítelo 4 veces, o hasta que lo necesites.</p>
+      <p>Esto ayuda a frenar el ataque de pánico. Es como resetear una computadora, le estás diciendo a tu cuerpo "No estamos en peligro inmediato".</p>
+      <div class="emphasis">Recuerda que estoy aquí contigo. Eso que acabas de hacer es un acto de protección propia. No es pequeño. Es enorme.</div>
+    </div>
+  </div>
+
+  <!-- S5 PASO 2 -->
+  <div class="section-card" data-s="5">
+    <button class="section-toggle" onclick="tog(this)">
+      <div class="num">2</div>
+      <div class="toggle-text"><h2>Aterriza al momento presente</h2><div class="preview">Técnica sensorial 5-4-3-2-1</div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="section-body">
+      <p>Quiero que prestes atención a tu entorno. Mira a tu alrededor. ¿Qué ves?</p>
+      <div class="sense-item"><div class="sense-num">👁️</div><div class="sense-content"><h5>Elige 5 cosas que puedes ver</h5><p>Deja que tu mirada se detenga en cada una por un momento. Puede ser una mancha en la pared, un árbol afuera, tus propias manos. Alterna tu atención entre los 5 objetos, enfocándote detenidamente en cada uno.</p></div></div>
+      <p>Respira profundamente mientras haces esto. Lo estás haciendo muy bien.</p>
+      <div class="sense-item"><div class="sense-num">✋</div><div class="sense-content"><h5>Nota 4 cosas que puedes tocar</h5><p>La tela de tu ropa, el asiento donde estás, o tu propia piel. Tócalas una por una, lleva toda la atención hacia tus dedos. Nota su textura, su temperatura, su forma.</p></div></div>
+      <p>Vas muy bien. Cuando estés lista, sigamos:</p>
+      <div class="sense-item"><div class="sense-num">👂</div><div class="sense-content"><h5>Identifica 3 cosas que puedes oír</h5><p>El sonido de un ventilador, el viento, o incluso tu propia respiración. Concéntrate en cada uno por un momento mientras alternas el foco de tu atención.</p></div></div>
+      <p>Excelente. No tengas prisa. Hazlo a tu propio ritmo.</p>
+      <div class="sense-item"><div class="sense-num">🌸</div><div class="sense-content"><h5>Identifica 2 cosas que puedes oler</h5><p>Dirige tu atención a lo que te rodea. Si no detectas ningún aroma puedes tratar de recordar 2 fragancias que te gustan, o traer algo cerca de ti (una crema, una vela, tu ropa).</p></div></div>
+      <p>Sigo contigo. Por último:</p>
+      <div class="sense-item"><div class="sense-num">👅</div><div class="sense-content"><h5>Nota 1 cosa que puedas saborear</h5><p>Incluso si sólo es la sensación sutil de nada en particular. Si no hay un sabor presente, recuerda o imagina uno. O lleva algo a tu boca, como agua o un caramelo.</p></div></div>
+      <div class="emphasis">Te felicito. Lo que acabas de hacer sirve para reconectar con el presente, separar lo que pasa afuera de lo que pasa adentro, y desactivar pensamientos intrusivos.</div>
+    </div>
+  </div>
+
+  <!-- S6 Cierre -->
+  <div class="section-card" data-s="6">
+    <button class="section-toggle" onclick="tog(this)">
+      <div class="num icon">💛</div>
+      <div class="toggle-text"><h2>Estás a salvo</h2><div class="preview">Un mensaje final para ti</div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="section-body">
+      <div class="mantra">"Estoy aquí. Estoy viva. Estoy a salvo."</div>
+      <p>Has llegado hasta aquí. Eso habla de tu valentía y de tu deseo de estar bien.</p>
+      <p>Recuerda: esta guía es un refugio que puedes visitar las veces que necesites. No hay límite. No hay reglas. Solo tú, tu respiración, y la certeza de que vas a estar bien.</p>
+      <p>Y si necesitas más apoyo, no dudes en buscar ayuda profesional. Pedir ayuda no es debilidad — es un acto de amor propio.</p>
+      <div class="emphasis">A menudo, todo lo que necesitas ya está dentro de ti.</div>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin:1.5rem 0"><button class="expand-btn" onclick="expAll()">Abrir todas las secciones ↓</button></div>
+
+  <footer class="guide-footer">
+    <img src="https://res.cloudinary.com/dp9l5i19b/image/upload/v1771980108/logoluzemy_wrak4l.png" alt="Logo" class="fl"><br>
+    <div class="sig">Luz Espinoza</div>
+    <div class="sr">Psicoterapeuta & Life Coach Espiritual</div>
+    <p class="disc">Esta guía es una herramienta de apoyo emocional y no sustituye la atención de un especialista. Si los síntomas persisten o son demasiado intensos, te recomiendo acudir con un profesional.</p>
+  </footer>
+</div>
+
+<script>
+function tog(btn){const c=btn.closest('.section-card');c.classList.toggle('open');upd();if(c.classList.contains('open'))setTimeout(()=>c.scrollIntoView({behavior:'smooth',block:'start'}),100)}
+function expAll(){document.querySelectorAll('.section-card').forEach(c=>c.classList.add('open'));upd()}
+function upd(){const t=document.querySelectorAll('.section-card').length,o=document.querySelectorAll('.section-card.open').length;document.getElementById('pf').style.width=Math.round(o/t*100)+'%';document.getElementById('pt').textContent=o+' de '+t+' secciones'}
+let bR=false,bI;const ph=[{t:'Inhala...',d:4000},{t:'Sostén...',d:4000},{t:'Exhala...',d:6000}];
+function startB(){const c=document.getElementById('bc'),l=document.getElementById('bl'),b=document.getElementById('bb');if(bR){bR=false;c.classList.remove('active');c.textContent='Iniciar';l.textContent='Presiona para comenzar';b.textContent='Comenzar respiración guiada';clearTimeout(bI);return}bR=true;c.classList.add('active');b.textContent='Detener';let r=0;function rp(i){if(!bR)return;if(i>=ph.length){r++;if(r>=4){bR=false;c.classList.remove('active');c.textContent='💛';l.textContent='¡Lo lograste! Respira con calma.';b.textContent='Comenzar de nuevo';return}rp(0);return}c.textContent=ph[i].t;l.textContent=(i===0?'Inhala por la nariz':i===1?'Guarda la calma':' Suelta despacio...')+' — Rep '+(r+1)+'/4';bI=setTimeout(()=>rp(i+1),ph[i].d)}l.textContent='Repetición 1 de 4';rp(0)}
+</script>
+</body>
+</html>
